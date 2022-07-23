@@ -1,4 +1,4 @@
 # WebMinePoolAPI
-An Python wrapper for the WebMinePool API.
+An wrapper for the WebMinePool API written in python.
 
 Base url: https://webminepool.com/page/http-api
