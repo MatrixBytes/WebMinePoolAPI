@@ -6,36 +6,35 @@ class WebMinePool:
         self.secret_key = newsecretkey
     
     def createUser(self, username):
-        req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/create_user/{username}').text)
+        req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/create_user/{username}/').text)
         if req["success"] == False:
             return False, req["message"]
         else:
             return True, req["message"]
 
     def deleteUser(self, username):
-        req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/delete_user/{username}').text)
+        req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/delete_user/{username}/').text)
         if req["success"] == False:
             return False, req["message"]
         else:
             return True, req["message"]
 
     def userHashes(self, username):
-        req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/user_hashes/{username}').text)
+        req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/user_hashes/{username}/').text)
         if req["success"] == False:
             return False, req["message"]
         else:
-            return True, req["hashes"]
+            return True, int(req["hashes"])
 
     def hashRate(self, amount):
-        req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/hash_rate/{amount}').text)
+        req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/hash_rate/{amount}/').text)
         if req["success"] == False:
             return False, req["message"]
         else:
-            return True, req["satoshi"]
+            return True, float(req["satoshi"])
 
     def Users(self):
         req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/users/').text)
-        print(req)
         if req["success"] == False:
             return False, req["message"]
         else:
@@ -46,10 +45,10 @@ class WebMinePool:
         if req["success"] == False:
             return False, req["message"]
         else:
-            return True, req["balance"]
+            return True, float(req["balance"])
     
     def Withdraw(self, username, amount):
-        req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/withdraw/{username}/{amount}').text)
+        req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/withdraw/{username}/{amount}/').text)
         if req["success"] == False:
             return False, req["message"]
         else:
@@ -68,3 +67,46 @@ class WebMinePool:
             return False, req["message"]
         else:
             return True, req["message"]
+    
+    def wmcRate(self, amount = None):
+        if amount == None:
+            amount = '/'
+        else:
+            amount = '/' + str(amount)
+
+        req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/wmc_rate{amount}').text)
+        if req["success"] == False:
+            return False, req["message"]
+        else:
+            return True, float(req["satoshi"])
+
+    def Hashes(self):
+        req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/hashes/').text)
+        if req["success"] == False:
+            return False, req["message"]
+        else:
+            return True, req["hashes"]
+
+    def setToken(self, hashes_amount, username = None):
+        if username == None:
+            username = '/'
+        else:
+            username = '/' + str(username)
+
+        req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/set_token/{hashes_amount}{username}').text)
+        if req["success"] == False:
+            return False, req["message"]
+        else:
+            return True, req["token_id"]
+    
+    def getToken(self, token_id, unset = None):
+        if unset == None:
+            unset = '/'
+        else:
+            unset = '/' + str(unset)
+
+        req = json.loads(get(f'https://webminepool.com/api/{self.secret_key}/get_token/{token_id}{unset}').text)
+        if req["success"] == False:
+            return False, req["message"]
+        else:
+            return True, {"state": req["state"], "end_hashes": req["end_hashes"], "done_at": req["done_at"]}
