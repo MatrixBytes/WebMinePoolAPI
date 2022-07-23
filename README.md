@@ -1,5 +1,4 @@
 # WebMinePoolAPI
-Public Python API handler Module for the WebMinePool API.
-Not all functions included.
+An Python wrapper for the WebMinePool API.
 
 https://webminepool.com/page/http-api
